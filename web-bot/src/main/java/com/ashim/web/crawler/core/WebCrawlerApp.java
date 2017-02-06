@@ -1,10 +1,10 @@
-package com.ashim.web.crawler;
+package com.ashim.web.crawler.core;
 
 /**
- * Hello world!
+ * Crawl the Web
  *
  */
-public class App 
+public class WebCrawlerApp 
 {
     public static void main( String[] args )
     {
