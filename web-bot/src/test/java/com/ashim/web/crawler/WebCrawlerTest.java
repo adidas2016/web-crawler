@@ -8,7 +8,7 @@ import org.mockito.Mock;
 
 import com.ashim.web.crawler.api.CrawlerRepository;
 import com.ashim.web.crawler.api.DomainLinkConverter;
-import com.ashim.web.crawler.api.WebCrawlerConnector;
+import com.ashim.web.crawler.api.WebConnector;
 import com.ashim.web.crawler.api.WebPageReader;
 
 /**
@@ -20,9 +20,11 @@ public class WebCrawlerTest {
 	WebPageReader webCrawler;
     
 	@Mock
-	WebCrawlerConnector webConnector;
+	WebConnector webConnector;
+	
 	@Mock
 	DomainLinkConverter linkConverter;
+	
 	@Mock
 	CrawlerRepository crawlRepository;
 	

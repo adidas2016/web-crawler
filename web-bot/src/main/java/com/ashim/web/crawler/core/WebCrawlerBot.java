@@ -1,23 +1,30 @@
 package com.ashim.web.crawler.core;
 
+import java.io.IOException;
 import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
 import java.util.List;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.ashim.web.crawler.api.CrawlerRepository;
 import com.ashim.web.crawler.api.DomainLinkConverter;
-import com.ashim.web.crawler.api.WebCrawlerConnector;
+import com.ashim.web.crawler.api.WebConnector;
 import com.ashim.web.crawler.api.WebPageReader;
 
 public class WebCrawlerBot {
 	
-	private WebCrawlerConnector webConnector;
+	private static final Logger logger = LoggerFactory.getLogger(WebCrawlerBot.class);
+	
+	private WebConnector webConnector;
 	private WebPageReader pageReader;
 	private DomainLinkConverter domainConverter;
 	private CrawlerRepository crawlerRepository;
 	
 	private String domainUrl;
 	
-	public WebCrawlerBot(WebCrawlerConnector webConnector, WebPageReader pageReader, 
+	public WebCrawlerBot(WebConnector webConnector, WebPageReader pageReader, 
 			   DomainLinkConverter domainConverter, CrawlerRepository crawlerRepository, String domainUrl) {
 		
 		
@@ -29,13 +36,16 @@ public class WebCrawlerBot {
 		
 	}
 	
-	public void crawlWeb(){
+	public void crawlWeb()  throws MalformedURLException, IOException{
 		
 		HttpURLConnection httpConnection = webConnector.getHttpConnectionFromUrl(domainUrl);
-		String htmlPage = pageReader.getHtmlPageFromUrlConnection(httpConnection);
+		
+		String htmlPage= pageReader.getHtmlPageFromUrlConnection(httpConnection);
+		
 		List<String> subDomainUrls = domainConverter.convertHtmlPageToSubDomainsAsLink(htmlPage);
 		
-		crawlerRepository.saveCrawledLinks(subDomainUrls);
+		subDomainUrls.forEach(System.out::println);
+//		crawlerRepository.saveCrawledLinks(subDomainUrls);
 		
 	}
 
