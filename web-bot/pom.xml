@@ -4,18 +4,22 @@
   <groupId>com.ashim.web.crawler</groupId>
   <artifactId>web-bot</artifactId>
   <packaging>jar</packaging>
-  <version>1.0-SNAPSHOT</version>
+  <version>0.1.0-SNAPSHOT</version>
   <name>web-bot</name>
   <url>http://maven.apache.org</url>
   
   <properties>
+    
       <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
       <junit.version>4.12</junit.version>
       <mockito.version>2.7.1</mockito.version>
       <assertj.version>3.6.1</assertj.version>
       <slf4j.version>1.7.21</slf4j.version>
 	  <logback.version>1.1.7</logback.version>
-	  <apache.http.client>4.5.2</apache.http.client>
+	  
+	  <project.build.finalName>web-bot</project.build.finalName>
+	  <project.packaging>jar</project.packaging>
+	  
   </properties>
   
   
@@ -53,13 +57,6 @@
          <version>${logback.version}</version>
          <scope>runtime</scope>
       </dependency>
-      
-      <dependency>
-          <groupId>org.apache.httpcomponents</groupId>
-          <artifactId>httpclient</artifactId>
-          <version>${apache.http.client}</version>
-       </dependency>
-      
          
   </dependencies>
   
@@ -76,7 +73,27 @@
 					<showWarnings>true</showWarnings>
 				</configuration>
 	 </plugin>
-
+	 
+	 <plugin>
+		    <groupId>org.apache.maven.plugins</groupId>
+		    <artifactId>maven-shade-plugin</artifactId>
+		    <executions>
+		        <execution>
+		            <goals>
+		                <goal>shade</goal>
+		            </goals>
+		            <configuration>
+		                <shadedArtifactAttached>true</shadedArtifactAttached>
+		                <transformers>
+		                    <transformer implementation=
+		                      "org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
+		                        <mainClass>com.ashim.web.crawler.core.WebCrawlerApp</mainClass>
+		                </transformer>
+		            </transformers>
+		        </configuration>
+		        </execution>
+		    </executions>
+     </plugin>
      	 
 	 <plugin>
              <groupId>org.apache.maven.plugins</groupId>

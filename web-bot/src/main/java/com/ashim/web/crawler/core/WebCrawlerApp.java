@@ -20,37 +20,43 @@ public class WebCrawlerApp
 {
 	private static final Logger logger = LoggerFactory.getLogger(WebCrawlerApp.class);
 	
-    public static void main( String[] args )
+    public static void main( String[] args ) 
     {
                
         PropertiesReader propReader =  PropertiesReader.getInstance();
-        WebConnector webConnector = new WebHttpConnectorImpl();
-    	WebPageReader pageReader = new WebPageReaderImpl();
-    	DomainLinkConverter domainConverter = new DomainLinkConverterImpl();
-    	CrawlerRepository crawlerRepository = new CrawlerRepositoryImpl();
+        
         
     	String domainUrl = null;
         
         try {
 			 domainUrl = propReader.getPropertyByValue("url");
 		} catch (IOException e) {
-			logger.warn("Could not find domain URL " + e.getMessage());
+			 logger.warn("Could not find domain URL " + e.getMessage());
 			
 		}
         
         logger.info(domainUrl);
         
-        WebCrawlerBot webBot = new WebCrawlerBot(webConnector, pageReader, domainConverter, crawlerRepository, domainUrl);
+        WebConnector webConnector = new WebHttpConnectorImpl();
+    	WebPageReader pageReader = new WebPageReaderImpl();
+    	DomainLinkConverter domainConverter = new DomainLinkConverterImpl();
+    	CrawlerRepository crawlerRepository = new CrawlerRepositoryImpl(domainUrl);
+    	
+    	String domainMainHost = null;
+		try {
+			domainMainHost = webConnector.getDomainNameFromUrl(domainUrl);
+		} catch (MalformedURLException e) {
+			logger.warn("Invalid Url " + e.getMessage());
+		}
+        
+        WebCrawlerBot webBot = new WebCrawlerBot(webConnector, pageReader, domainConverter, crawlerRepository, domainUrl, domainMainHost);
         
         try {
-			webBot.crawlWeb();
+			webBot.goCrawlTheWeb();
 		} catch (MalformedURLException e) {
-			logger.warn("Invlid Url " + e.getMessage());
+			logger.warn("Invalid Url " + e.getMessage());
 		} catch (IOException e) {
 			logger.warn("IO problems " + e.getMessage());
 		}
-        
-        
-        
     }
 }
